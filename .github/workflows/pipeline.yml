@@ -24,6 +24,7 @@ jobs:
         env:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
+          PORT: ${{ secrets.PORT }}
       - name: Run npm build
         run: npm run build --prefix frontend
       - name: Install Playwright Browsers
@@ -33,3 +34,4 @@ jobs:
         env:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
+          PORT: ${{ secrets.PORT }}
