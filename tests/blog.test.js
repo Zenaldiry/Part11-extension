@@ -10,9 +10,9 @@ test('dummy returns one', () => {
   assert.strictEqual(result, 1)
 })
 
-test('dummy failing test', () => {
-  assert.strictEqual(2, 1)
-})
+// test('dummy failing test', () => {
+//   assert.strictEqual(2, 1)
+// })
 
 describe('total likes', () => {
   const listWithOneBlog = [
