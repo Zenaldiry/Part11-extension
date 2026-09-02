@@ -43,3 +43,39 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+  notify_failure:
+    needs: [build_and_test, deploy]
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - uses: actions/checkout@v6
+      - name: Send Failure Notification
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: 'Build Failed! The pipeline encountered an error'
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** ${{ github.sha }}
+            **Message:** ${{ github.event.head_commit.message }}
+            **Author:** ${{ github.actor }}
+            **Workflow:** ${{ github.workflow }}
+            **Job:** ${{ github.job }}
+          color: 0xFF0000
+  notify_success:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - uses: actions/checkout@v6
+      - name: Send Success Notification
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{secrets.DISCORD_WEBHOOK}}
+          title: 'Deployment Successful! A new version deployed to production'
+          description: |
+            **Commit:** ${{ github.sha }}
+            **Message:** ${{ github.event.head_commit.message }}
+            **Author:** ${{ github.actor }}
+          color: 0x00FF00
