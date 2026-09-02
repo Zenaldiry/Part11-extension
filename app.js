@@ -32,6 +32,14 @@ if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
   app.use('/api/testing', testingRouter)
 }
+app.get('/health', (_req, res) => {
+  res.send('ok')
+})
+
+app.get('/version', (_req, res) => {
+  res.send('1')
+})
+
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
