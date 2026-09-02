@@ -35,3 +35,11 @@ jobs:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
           PORT: ${{ secrets.PORT }}
+  deploy:
+    needs: [build_and_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Trigger deployment
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
