@@ -7,12 +7,13 @@ const {
   unknownEndpoint,
   errorHandler,
 } = require('./utils/middlewares')
+const path = require('path')
 const blogRouter = require('./controllers/blog')
 const userRouter = require('./controllers/user')
 const loginRouter = require('./controllers/login')
 const { URI } = require('./utils/config')
 app.use(express.json())
-app.use(express.static('frontend/dist'))
+app.use(express.static(path.join(__dirname, 'frontend/dist')))
 app.use(requestLoggers)
 
 mongoose.set('strictQuery', false)
@@ -31,7 +32,7 @@ if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
   app.use('/api/testing', testingRouter)
 }
-app.use(errorHandler)
 app.use(unknownEndpoint)
+app.use(errorHandler)
 
 module.exports = app
